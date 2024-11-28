@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/ijo4"
+        android:gravity="center_horizontal">
+
+        <!-- Teks "Tambahkan Catatan" -->
+        <TextView
+            android:id="@+id/tvAddNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tambahkan Catatan"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/ijo1"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Pilihan Pemasukan dan Pengeluaran -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- Pemasukan -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/ivIncome"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:src="@drawable/masuk1"
+                    android:contentDescription="Icon Pemasukan" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pemasukan"
+                    android:textSize="16sp"
+                    android:textColor="@color/ijo1"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Pengeluaran -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/ivExpense"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:src="@drawable/keluar2"
+                    android:contentDescription="Icon Pengeluaran" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pengeluaran"
+                    android:textSize="16sp"
+                    android:textColor="@color/ijo1"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+</LinearLayout>
+
+

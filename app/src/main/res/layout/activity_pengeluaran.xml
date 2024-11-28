@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/ijo4">
+
+    <!-- Judul Form -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tambah Pengeluaran"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Input Tanggal -->
+    <EditText
+        android:id="@+id/ettanggal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tanggal"
+        android:inputType="date"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/reunded_corner"
+        android:drawableStart="@drawable/baseline_date_range_24"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Input Kategori -->
+    <EditText
+        android:id="@+id/etkategori"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Kategori"
+        android:drawableStart="@drawable/baseline_format_list_bulleted_24"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/reunded_corner"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@id/ettanggal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Input Jumlah -->
+    <EditText
+        android:id="@+id/etjumlah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Jumlah"
+        android:inputType="numberDecimal"
+        android:background="@drawable/reunded_corner"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/etkategori"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Tombol Simpan -->
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simpan"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/ijo1"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/etjumlah"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ijo4"
+    tools:context=".MainActivity">
+
+    <!-- Bagian Penghasilan dan Pengeluaran -->
+    <LinearLayout
+        android:id="@+id/pemasukanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/ijo3"
+        android:padding="16dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:elevation="4dp"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/masuk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Penghasilan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="start"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/keluar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pengeluaran"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <!-- Garis Pembatas -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ijo1"
+        android:layout_below="@id/pemasukanLayout"
+        android:layout_marginVertical="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Daftar Catatan"
+        android:gravity="center"
+        android:layout_marginTop="120dp"
+        android:textColor="@color/ijo1"
+        android:textStyle="bold"/>
+
+    <!-- RecyclerView untuk Daftar Transaksi -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"
+        android:layout_marginTop="150dp"
+        android:scrollbars="vertical" />
+
+    <!-- FloatingActionButton -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/tambah"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@color/ijo1"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        android:src="@drawable/baseline_add_24" />
+</RelativeLayout>
