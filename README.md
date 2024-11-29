@@ -17,6 +17,9 @@ Aplikasi Android untuk mengelola keuangan dengan fitur pencatatan pemasukan dan 
 
 ## Berikut Tampilan dari hasil projek yang telah kami buat:
 
+### Tampilan Register
+<img src="app/sampledata/register.jpeg" width="300">
+
 ### Tampilan Login
 <img src="app/sampledata/login.jpeg" width="300">
 
