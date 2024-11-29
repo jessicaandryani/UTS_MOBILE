@@ -24,7 +24,7 @@ Aplikasi Android untuk mengelola keuangan dengan fitur pencatatan pemasukan dan 
 ![login.jpeg](app/sampledata/login.jpeg)
 
 ### Tampilan Home
-![home](app/sampledata/home.jpeg)
+<img src="app/sampledata/register.jpeg" width="300">
 
 ### Tampilan Dompet
 ![dompet.jpeg](app/sampledata/dompet.jpeg)
