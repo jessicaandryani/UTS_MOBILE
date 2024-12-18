@@ -11,4 +11,7 @@
     <string name="login">LOGIN</string>
     <string name="datang">Selamat Datang</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notifikasi_1">Notifikasi 1</string>
+    <string name="notifikasi_2">Notifikasi 2</string>
+    <string name="notifikasi_3">Notifikasi 3</string>
 </resources>

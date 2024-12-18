@@ -29,10 +29,31 @@
                 android:title="@string/app_name"
                 android:titleTextColor="@color/white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:menu="@menu/drawer_menu"
+                app:menu="@menu/drawer_menu" >
 
-                />
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/anonymous_pro_bold"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0.1"
+                    android:text="Dompetku"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
 
+                <ImageView
+                    android:id="@+id/notification_bell"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/notifikasi"
+                    android:contentDescription="Notifikasi"
+                    android:padding="8dp"/>
+
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- FrameLayout untuk isi konten -->
