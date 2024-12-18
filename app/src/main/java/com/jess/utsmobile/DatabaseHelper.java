@@ -6,19 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "keuangan.db"; // Gunakan satu nama konsisten
-    private static final int DATABASE_VERSION = 2; // Naikkan versi jika ada perubahan
+    private static final String DATABASE_NAME = "keuangan.db";
+    private static final int DATABASE_VERSION = 2;
 
-    // Nama tabel
     private static final String TABLE_NAME = "transaksi";
-
-    // Kolom tabel
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_TANGGAL = "tanggal";
     private static final String COLUMN_KATEGORI = "kategori";
@@ -26,15 +22,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_TIPE = "tipe";
 
     public DatabaseHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION); // Gunakan nama konsisten
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Membuat tabel users
         db.execSQL("CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT)");
 
-        // Membuat tabel transaksi
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TANGGAL + " TEXT, " +
@@ -46,14 +40,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Hapus tabel lama
         db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        // Buat ulang tabel
         onCreate(db);
     }
 
-    // Menambahkan data user
     public Boolean insertData(String email, String password) {
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -75,7 +66,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor.getCount() > 0;
     }
 
-    // Menambahkan data transaksi
     public void addTransaksi(String tanggal, String kategori, double jumlah, String tipe) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -87,7 +77,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Mengambil total pemasukan
     public double getTotalPemasukan() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -102,7 +91,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return total;
     }
 
-    // Mengambil total pengeluaran
     public double getTotalPengeluaran() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -117,7 +105,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return total;
     }
 
-    // Mengambil semua data transaksi
     public ArrayList<TransaksiModel> getAllTransaksi() {
         ArrayList<TransaksiModel> transaksiList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -140,7 +127,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return transaksiList;
     }
 
-    // Menghapus transaksi
     public void deleteTransaksi(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});

@@ -1,131 +1,76 @@
 package com.jess.utsmobile;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class LaporanFragment extends Fragment {
 
-    private PieChart pieChart;
+    private WebView webView;
+    private DatabaseHelper db;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_laporan, container, false);
 
-        // Inisialisasi PieChart
-        pieChart = view.findViewById(R.id.pieChart_view);
+        webView = view.findViewById(R.id.webView);
+        db = new DatabaseHelper(getContext());
 
-        // Inisialisasi dan tampilkan pie chart
-        initPieChart();
-        fetchChartData();
+        // Load Google Charts
+        loadGoogleCharts();
 
         return view;
     }
 
-    private void initPieChart() {
-        // Menggunakan persentase sebagai nilai
-        pieChart.setUsePercentValues(true);
+    private void loadGoogleCharts() {
+        double totalPemasukan = db.getTotalPemasukan();
+        double totalPengeluaran = db.getTotalPengeluaran();
 
-        // Menghapus label deskripsi di sudut kiri bawah
-        pieChart.getDescription().setEnabled(false);
+        String htmlContent = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n" +
+                "    <script type=\"text/javascript\">\n" +
+                "        google.charts.load('current', {'packages':['corechart']});\n" +
+                "        google.charts.setOnLoadCallback(drawChart);\n" +
+                "        function drawChart() {\n" +
+                "            var data = google.visualization.arrayToDataTable([\n" +
+                "                ['Category', 'Value'],\n" +
+                "                ['Pemasukan', " + totalPemasukan + "],\n" +
+                "                ['Pengeluaran', " + totalPengeluaran + "]\n" +
+                "            ]);\n" +
+                "\n" +
+                "            var options = {\n" +
+                "                title: 'Laporan Keuangan',\n" +
+                "                pieHole: 0.4,\n" +
+                "            };\n" +
+                "\n" +
+                "            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));\n" +
+                "            chart.draw(data, options);\n" +
+                "        }\n" +
+                "    </script>\n" +
+                "    <style>\n" +
+                "        body, html { height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; }\n" +
+                "        #donutchart { width: 100%; height: 100%; }\n" +
+                "    </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <div id=\"donutchart\"></div>\n" +
+                "</body>\n" +
+                "</html>";
 
-        // Mengaktifkan rotasi chart
-        pieChart.setRotationEnabled(true);
-        // Menambahkan gesekan saat memutar chart
-        pieChart.setDragDecelerationFrictionCoef(0.9f);
-        // Mengatur sudut awal dari sisi kanan
-        pieChart.setRotationAngle(0);
-
-        // Menyoroti entri saat diketuk
-        pieChart.setHighlightPerTapEnabled(true);
-        // Menambahkan animasi agar entri muncul dari 0 derajat
-        pieChart.animateY(1400, Easing.EaseInOutQuad);
-        // Mengatur warna lubang di tengah
-        pieChart.setHoleColor(Color.parseColor("#000000"));
-    }
-
-    private void fetchChartData() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://your-api-base-url.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
-
-        String apiKey = getString(R.string.google_api_key);
-        Call<GoogleApiResponse> call = apiService.getChartData(apiKey);
-
-        call.enqueue(new Callback<GoogleApiResponse>() {
-            @Override
-            public void onResponse(Call<GoogleApiResponse> call, Response<GoogleApiResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    showPieChart(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GoogleApiResponse> call, Throwable t) {
-                // Handle failure
-            }
-        });
-    }
-
-    private void showPieChart(GoogleApiResponse response) {
-        ArrayList<PieEntry> pieEntries = new ArrayList<>();
-        String label = "type";
-
-        // Inisialisasi data dari response
-        for (GoogleApiResponse.DataItem item : response.data) {
-            pieEntries.add(new PieEntry(item.value, item.category));
-        }
-
-        // Inisialisasi warna untuk entri
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.parseColor("#304567"));
-        colors.add(Color.parseColor("#309967"));
-        colors.add(Color.parseColor("#476567"));
-        colors.add(Color.parseColor("#890567"));
-        colors.add(Color.parseColor("#a35567"));
-        colors.add(Color.parseColor("#ff5f67"));
-        colors.add(Color.parseColor("#3ca567"));
-
-        // Mengumpulkan entri dengan label
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, label);
-        // Mengatur ukuran teks nilai
-        pieDataSet.setValueTextSize(12f);
-        // Menyediakan daftar warna untuk mewarnai entri berbeda
-        pieDataSet.setColors(colors);
-        // Mengelompokkan data set dari entri ke chart
-        PieData pieData = new PieData(pieDataSet);
-        // Menampilkan nilai entri, default true jika tidak diatur
-        pieData.setDrawValues(true);
-
-        // Mengubah nilai menjadi persentase
-        pieData.setValueFormatter(new PercentFormatter());
-
-        pieChart.setData(pieData);
-        pieChart.invalidate();
+        webView.setWebViewClient(new WebViewClient());
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.loadData(htmlContent, "text/html", "UTF-8");
     }
 }

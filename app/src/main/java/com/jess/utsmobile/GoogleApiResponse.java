@@ -1,4 +1,3 @@
-// GoogleApiResponse.java
 package com.jess.utsmobile;
 
 import java.util.List;
