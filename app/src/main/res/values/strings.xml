@@ -1,6 +1,6 @@
 <resources>
     <!-- Nama aplikasi -->
-    <string name="app_name">KEUANGANKU</string>
+    <string name="app_name">DOMPETKU</string>
 
     <!-- Strings untuk RegisterActivity -->
     <string name="selamat_datang">Silahkan Daftar</string>

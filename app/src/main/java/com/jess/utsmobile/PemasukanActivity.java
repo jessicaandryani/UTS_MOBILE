@@ -1,13 +1,6 @@
 package com.jess.utsmobile;
 
-import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +40,14 @@ public class PemasukanActivity extends AppCompatActivity {
                 if (!tanggal.isEmpty() && !kategori.isEmpty() && !jumlahStr.isEmpty()) {
                     double jumlah = Double.parseDouble(jumlahStr);
                     db.addTransaksi(tanggal, kategori, jumlah, "Pemasukan");
+
+                    // Mengirim result ke HomeFragment untuk menambahkan transaksi baru
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("tanggal", tanggal);
+                    resultIntent.putExtra("kategori", kategori);
+                    resultIntent.putExtra("jumlah", jumlah);
+                    setResult(RESULT_OK, resultIntent);
+
                     Toast.makeText(PemasukanActivity.this, "Pemasukan disimpan!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
@@ -55,6 +56,7 @@ public class PemasukanActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setCurrentDate() {
         // Mendapatkan tanggal saat ini
         Calendar calendar = Calendar.getInstance();

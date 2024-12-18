@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                     if (itemId == R.id.navigation_home) {
                         fragment = new HomeFragment();
                     } else if (itemId == R.id.navigation_dompet) {
-                        fragment = new WalletFragment();
+                        fragment = new LaporanFragment();
                     } else if (itemId == R.id.navigation_account) {
                         fragment = new AccountFragment();
                     }

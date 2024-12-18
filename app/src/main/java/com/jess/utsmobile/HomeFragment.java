@@ -1,14 +1,15 @@
 package com.jess.utsmobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.Intent;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,23 +27,21 @@ public class HomeFragment extends Fragment {
     private DatabaseHelper db;
     private ArrayList<TransaksiModel> transaksiList;
     private TransaksiAdapter adapter;
+    private static final int REQUEST_CODE = 1;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Initialize UI components
         recyclerView = view.findViewById(R.id.recyclerView);
         masukText = view.findViewById(R.id.masuk);
         keluarText = view.findViewById(R.id.keluar);
         FloatingActionButton tambahButton = view.findViewById(R.id.tambah);
 
-        // Set click listener for FloatingActionButton
         tambahButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), PilihanActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
         });
 
         return view;
@@ -52,31 +51,50 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize database
         db = new DatabaseHelper(getContext());
 
-        // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         transaksiList = db.getAllTransaksi();
         adapter = new TransaksiAdapter(transaksiList);
         recyclerView.setAdapter(adapter);
 
-        // Update total pemasukan dan pengeluaran
+        adapter.setOnItemDeleteListener(position -> {
+            TransaksiModel transaksi = transaksiList.get(position);
+            db.deleteTransaksi(transaksi.getId());
+            transaksiList.remove(position);
+            adapter.notifyItemRemoved(position);
+            updateTotal();
+        });
+
         updateTotal();
-
-
     }
 
-    // Method to update total pemasukan and pengeluaran
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            String tanggal = data.getStringExtra("tanggal");
+            String kategori = data.getStringExtra("kategori");
+            double jumlah = data.getDoubleExtra("jumlah", 0);
+
+            addNewTransaksi(new TransaksiModel(0, tanggal, kategori, jumlah, "Pemasukan"));
+        }
+    }
+
+    public void addNewTransaksi(TransaksiModel transaksi) {
+        transaksiList.add(0, transaksi);
+        adapter.notifyItemInserted(0);
+        recyclerView.scrollToPosition(0);
+        updateTotal();
+    }
+
     private void updateTotal() {
         double totalMasuk = db.getTotalPemasukan();
         double totalKeluar = db.getTotalPengeluaran();
 
-        // Format currency to Rupiah
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-        formatRupiah.setMaximumFractionDigits(0); // Remove decimals
+        formatRupiah.setMaximumFractionDigits(0);
 
-        // Set formatted totals to TextViews
         masukText.setText("Penghasilan: " + formatRupiah.format(totalMasuk));
         keluarText.setText("Pengeluaran: " + formatRupiah.format(totalKeluar));
     }

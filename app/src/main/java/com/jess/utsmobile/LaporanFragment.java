@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class WalletFragment extends Fragment {
+public class LaporanFragment extends Fragment {
 
     private TextView cleanAssetsValue; // Untuk menampilkan Aset Bersih
     private TextView accountBalance;   // Untuk menampilkan saldo akun
@@ -17,7 +17,7 @@ public class WalletFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_wallet, container, false);
+        View view = inflater.inflate(R.layout.fragment_laporan, container, false);
 
         // Inisialisasi UI elements
         cleanAssetsValue = view.findViewById(R.id.clean_assets_value);   // Menemukan clean_assets_value TextView

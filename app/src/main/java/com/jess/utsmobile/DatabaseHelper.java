@@ -86,32 +86,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
+
+    // Mengambil total pemasukan
     public double getTotalPemasukan() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'masuk'", null);
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'Pemasukan'", null);
 
         if (cursor.moveToFirst()) {
             total = cursor.getDouble(0);
         }
         cursor.close();
 
-        // Tambahkan log untuk debugging
         Log.d("DatabaseHelper", "Total Pemasukan: " + total);
         return total;
     }
 
+    // Mengambil total pengeluaran
     public double getTotalPengeluaran() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'keluar'", null);
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'Pengeluaran'", null);
 
         if (cursor.moveToFirst()) {
             total = cursor.getDouble(0);
         }
         cursor.close();
 
-        // Tambahkan log untuk debugging
         Log.d("DatabaseHelper", "Total Pengeluaran: " + total);
         return total;
     }
@@ -120,17 +121,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<TransaksiModel> getAllTransaksi() {
         ArrayList<TransaksiModel> transaksiList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 
         if (cursor.moveToFirst()) {
             do {
                 TransaksiModel transaksi = new TransaksiModel(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getDouble(3),
-                        cursor.getString(4)
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TANGGAL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_KATEGORI)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_JUMLAH)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPE))
                 );
                 transaksiList.add(transaksi);
             } while (cursor.moveToNext());
@@ -139,10 +139,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return transaksiList;
     }
+
+    // Menghapus transaksi
     public void deleteTransaksi(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("transaksi", "id = ?", new String[]{String.valueOf(id)});
+        db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
-
 }
