@@ -13,30 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:background="@drawable/rounded_bottom"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome"
-            android:layout_marginTop="65dp"
-            android:layout_marginLeft="25dp"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-        <TextView
-            android:id="@+id/akun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jessica"
-            android:layout_marginTop="0dp"
-            android:textColor="@color/black"
-            android:layout_marginLeft="25dp"
-            android:textSize="30dp"
-            android:letterSpacing="0.2"
-            android:textStyle="bold"
-            />
-
+            android:textColor="@color/white"
+            android:textSize="35dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- RecyclerView untuk menampilkan daftar item -->
