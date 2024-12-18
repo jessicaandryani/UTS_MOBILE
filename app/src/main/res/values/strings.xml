@@ -14,4 +14,6 @@
     <string name="notifikasi_1">Notifikasi 1</string>
     <string name="notifikasi_2">Notifikasi 2</string>
     <string name="notifikasi_3">Notifikasi 3</string>
+
+    <string name="google_api_key">AIzaSyAGQ0NpW0mkeTMY2Y_6L6EqMCxou67chOM</string>
 </resources>
