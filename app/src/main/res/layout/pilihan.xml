@@ -15,7 +15,6 @@
 
         <!-- Toolbar -->
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
@@ -75,7 +74,7 @@
                 android:id="@+id/ivIncome"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:src="@drawable/masuk1_1"
+                android:src="@drawable/pendapatan"
                 android:contentDescription="Icon Pemasukan" />
 
             <TextView
@@ -102,7 +101,7 @@
                 android:id="@+id/ivExpense"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:src="@drawable/keluar2"
+                android:src="@drawable/biaya"
                 android:contentDescription="Icon Pengeluaran" />
 
             <TextView
