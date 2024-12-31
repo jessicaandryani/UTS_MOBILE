@@ -3,11 +3,19 @@
 
     <item
         android:id="@+id/navigation_home"
+<<<<<<< HEAD
         android:icon="@drawable/baseline_list_alt_24"
         android:title="Transaksi" />
     <item
         android:id="@+id/navigation_dompet"
         android:icon="@drawable/baseline_auto_graph_24"
+=======
+        android:icon="@drawable/transaksi"
+        android:title="Transaksi" />
+    <item
+        android:id="@+id/navigation_dompet"
+        android:icon="@drawable/lapor"
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
         android:title="Lapor" />
     <item
         android:id="@+id/navigation_account"

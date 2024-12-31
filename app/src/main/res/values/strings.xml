@@ -11,6 +11,7 @@
     <string name="login">LOGIN</string>
     <string name="datang">Selamat Datang</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+<<<<<<< HEAD
     <string-array name="kategori_pemasukan">
         <item>Gaji</item>
         <item>Bonus</item>
@@ -25,5 +26,12 @@
         <item>Hiburan</item>
         <item>Tagihan</item>
     </string-array>
+=======
+    <string name="notifikasi_1">Notifikasi 1</string>
+    <string name="notifikasi_2">Notifikasi 2</string>
+    <string name="notifikasi_3">Notifikasi 3</string>
+
+    <string name="google_api_key">AIzaSyAGQ0NpW0mkeTMY2Y_6L6EqMCxou67chOM</string>
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 </resources>
 

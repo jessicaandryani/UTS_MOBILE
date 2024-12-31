@@ -9,7 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Locale;
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 
 public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.ViewHolder> {
 
@@ -43,6 +46,19 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.View
         holder.kategori.setText(transaksi.getKategori());
         holder.jumlah.setText(formatJumlah(transaksi.getJumlah(), transaksi.getJenis()));
 
+<<<<<<< HEAD
+=======
+        String jumlahFormatted = formatJumlah(transaksi.getJumlah(), transaksi.getJenis());
+        holder.jumlah.setText(jumlahFormatted);
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onItemDelete(position);
+            }
+            return true;
+        });
+
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
         holder.itemView.setOnClickListener(v -> {
             new android.app.AlertDialog.Builder(v.getContext())
                     .setTitle("Hapus Transaksi")
@@ -59,11 +75,19 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.View
 
     private String formatJumlah(double jumlah, String jenisTransaksi) {
         if (jenisTransaksi.equals("Pemasukan")) {
+<<<<<<< HEAD
             return "+Rp " + String.format(Locale.getDefault(), "%,.0f", jumlah);
         } else if (jenisTransaksi.equals("Pengeluaran")) {
             return "-Rp " + String.format(Locale.getDefault(), "%,.0f", jumlah);
         }
         return "Rp " + String.format(Locale.getDefault(), "%,.0f", jumlah);
+=======
+            return "+" + String.format("Rp %.2f", jumlah);
+        } else if (jenisTransaksi.equals("Pengeluaran")) {
+            return "-" + String.format("Rp %.2f", jumlah);
+        }
+        return String.format("Rp %.2f", jumlah);
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     }
 
     @Override
@@ -81,4 +105,8 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.View
             jumlah = itemView.findViewById(R.id.jumlah);
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457

@@ -1,7 +1,10 @@
 package com.jess.utsmobile;
 
+<<<<<<< HEAD
 import static android.app.Activity.RESULT_OK;
 
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +33,7 @@ public class HomeFragment extends Fragment {
     private DatabaseHelper db;
     private ArrayList<TransaksiModel> transaksiList;
     private TransaksiAdapter adapter;
+    private static final int REQUEST_CODE = 1;
 
     @Nullable
     @Override
@@ -41,10 +46,13 @@ public class HomeFragment extends Fragment {
         saldoText = view.findViewById(R.id.saldo);
         FloatingActionButton tambahButton = view.findViewById(R.id.tambah);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
         tambahButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), PilihanActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
         });
 
         return view;
@@ -56,6 +64,11 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         db = new DatabaseHelper(getContext());
+<<<<<<< HEAD
+=======
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
         transaksiList = db.getAllTransaksi();
         adapter = new TransaksiAdapter(transaksiList);
         adapter = new TransaksiAdapter(db.getAllTransaksi());
@@ -64,6 +77,7 @@ public class HomeFragment extends Fragment {
 
         adapter.setOnItemDeleteListener(position -> {
             TransaksiModel transaksi = transaksiList.get(position);
+<<<<<<< HEAD
             db.deleteTransaksi(transaksi.getId()); // Panggil dengan ID dari transaksi
             transaksiList.remove(position);
             adapter.notifyItemRemoved(position);
@@ -74,11 +88,37 @@ public class HomeFragment extends Fragment {
         });
 
         // Perbarui total setelah data dimuat
+=======
+            db.deleteTransaksi(transaksi.getId());
+            transaksiList.remove(position);
+            adapter.notifyItemRemoved(position);
+            updateTotal();
+        });
+
         updateTotal();
-
-
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            String tanggal = data.getStringExtra("tanggal");
+            String kategori = data.getStringExtra("kategori");
+            double jumlah = data.getDoubleExtra("jumlah", 0);
+
+            addNewTransaksi(new TransaksiModel(0, tanggal, kategori, jumlah, "Pemasukan"));
+        }
+    }
+
+    public void addNewTransaksi(TransaksiModel transaksi) {
+        transaksiList.add(0, transaksi);
+        adapter.notifyItemInserted(0);
+        recyclerView.scrollToPosition(0);
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
+        updateTotal();
+    }
+
+<<<<<<< HEAD
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -89,14 +129,23 @@ public class HomeFragment extends Fragment {
     }
 
 
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     private void updateTotal() {
         double totalMasuk = db.getTotalPemasukan();
         double totalKeluar = db.getTotalPengeluaran();
         double totalSaldo = db.getTotalSaldo();
 
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+<<<<<<< HEAD
         masukText.setText(formatRupiah.format(totalMasuk));
         keluarText.setText(formatRupiah.format(totalKeluar));
         saldoText.setText(formatRupiah.format(totalSaldo));
+=======
+        formatRupiah.setMaximumFractionDigits(0);
+
+        masukText.setText("Penghasilan: " + formatRupiah.format(totalMasuk));
+        keluarText.setText("Pengeluaran: " + formatRupiah.format(totalKeluar));
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     }
 }

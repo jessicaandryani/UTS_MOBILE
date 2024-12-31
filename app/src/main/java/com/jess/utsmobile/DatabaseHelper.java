@@ -6,20 +6,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+<<<<<<< HEAD
     private static final String DATABASE_NAME = "UTSMobile.db";
     private static final int DATABASE_VERSION = 2; // Tingkatkan versi jika struktur tabel diubah
     private static final String TABLE_USERS = "users";
+=======
+    private static final String DATABASE_NAME = "keuangan.db";
+    private static final int DATABASE_VERSION = 2;
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 
-    // Nama tabel
     private static final String TABLE_NAME = "transaksi";
-
-    // Kolom tabel
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_TANGGAL = "tanggal";
     private static final String COLUMN_KATEGORI = "kategori";
@@ -27,19 +28,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_TIPE = "tipe";
 
     public DatabaseHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION); // Gunakan nama konsisten
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+<<<<<<< HEAD
         // Membuat tabel users
         db.execSQL("CREATE TABLE " + TABLE_USERS + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "email TEXT UNIQUE, " +
                 "nama TEXT, " +
                 "password TEXT)");
+=======
+        db.execSQL("CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT)");
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 
-        // Membuat tabel transaksi
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TANGGAL + " TEXT, " +
@@ -51,16 +55,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Hapus tabel lama
         db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        // Buat ulang tabel
         onCreate(db);
     }
 
+<<<<<<< HEAD
     // Menambahkan data user
     public Boolean insertData(String email, String nama, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
+=======
+    public Boolean insertData(String email, String password) {
+        SQLiteDatabase MyDatabase = this.getWritableDatabase();
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
         ContentValues contentValues = new ContentValues();
         contentValues.put("email", email);
         contentValues.put("nama", nama);
@@ -86,8 +93,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return valid;
     }
 
+<<<<<<< HEAD
 
     // Menambahkan data transaksi
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     public void addTransaksi(String tanggal, String kategori, double jumlah, String tipe) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -98,6 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
+
     public double getTotalPemasukan() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -108,7 +119,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        // Tambahkan log untuk debugging
         Log.d("DatabaseHelper", "Total Pemasukan: " + total);
         return total;
     }
@@ -130,34 +140,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'Pengeluaran'", null);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 
         if (cursor.moveToFirst()) {
             total = cursor.getDouble(0);
         }
         cursor.close();
 
-        // Tambahkan log untuk debugging
         Log.d("DatabaseHelper", "Total Pengeluaran: " + total);
         return total;
     }
 
+<<<<<<< HEAD
 
     // Mengambil semua data transaksi
+=======
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     public ArrayList<TransaksiModel> getAllTransaksi() {
         ArrayList<TransaksiModel> transaksiList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 
         if (cursor.moveToFirst()) {
             do {
                 TransaksiModel transaksi = new TransaksiModel(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getDouble(3),
-                        cursor.getString(4)
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TANGGAL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_KATEGORI)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_JUMLAH)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPE))
                 );
                 transaksiList.add(transaksi);
             } while (cursor.moveToNext());
@@ -166,14 +180,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return transaksiList;
     }
+
     public void deleteTransaksi(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("transaksi", "id = ?", new String[]{String.valueOf(id)});
+        db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
+<<<<<<< HEAD
 
 
     public double getTotalSaldo() {
         return getTotalPemasukan() - getTotalPengeluaran();
     }
 }
+=======
+}
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457

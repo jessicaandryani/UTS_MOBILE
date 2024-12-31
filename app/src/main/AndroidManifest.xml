@@ -54,6 +54,14 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity android:name=".PilihanActivity" />
+<<<<<<< HEAD
+=======
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     </application>
 
 </manifest>

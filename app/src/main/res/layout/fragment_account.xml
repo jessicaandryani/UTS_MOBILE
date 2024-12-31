@@ -13,11 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/rounded_bottom"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="Halloo"
             android:layout_marginTop="130dp"
             android:textColor="@color/black"
@@ -37,6 +39,12 @@
             android:textStyle="bold"
             />
 
+=======
+            android:text="Welcome"
+            android:textColor="@color/white"
+            android:textSize="35dp"
+            android:textStyle="bold" />
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
     </LinearLayout>
 
     <!-- RecyclerView untuk menampilkan daftar item -->

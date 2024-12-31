@@ -1,9 +1,14 @@
 package com.jess.utsmobile;
 
+<<<<<<< HEAD
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
+=======
+import android.content.Intent;
+import android.os.Bundle;
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -64,6 +69,7 @@ public class PemasukanActivity extends AppCompatActivity {
 
                 // Validasi input
                 if (!tanggal.isEmpty() && !kategori.isEmpty() && !jumlahStr.isEmpty()) {
+<<<<<<< HEAD
                     try {
                         double jumlah = Double.parseDouble(jumlahStr);
 
@@ -74,6 +80,20 @@ public class PemasukanActivity extends AppCompatActivity {
                     } catch (NumberFormatException e) {
                         Toast.makeText(PemasukanActivity.this, "Jumlah harus berupa angka!", Toast.LENGTH_SHORT).show();
                     }
+=======
+                    double jumlah = Double.parseDouble(jumlahStr);
+                    db.addTransaksi(tanggal, kategori, jumlah, "Pemasukan");
+
+                    // Mengirim result ke HomeFragment untuk menambahkan transaksi baru
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("tanggal", tanggal);
+                    resultIntent.putExtra("kategori", kategori);
+                    resultIntent.putExtra("jumlah", jumlah);
+                    setResult(RESULT_OK, resultIntent);
+
+                    Toast.makeText(PemasukanActivity.this, "Pemasukan disimpan!", Toast.LENGTH_SHORT).show();
+                    finish();
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
                 } else {
                     Toast.makeText(PemasukanActivity.this, "Isi semua field!", Toast.LENGTH_SHORT).show();
                 }

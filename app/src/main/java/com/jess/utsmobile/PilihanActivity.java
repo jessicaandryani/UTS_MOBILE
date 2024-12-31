@@ -2,7 +2,12 @@ package com.jess.utsmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.view.MenuItem;
+=======
+import android.view.View;
+import android.widget.ImageButton;
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +24,7 @@ public class PilihanActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+<<<<<<< HEAD
         // Menampilkan tombol kembali
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -26,6 +32,18 @@ public class PilihanActivity extends AppCompatActivity {
         }
 
         // Inisialisasi komponen
+=======
+        // Inisialisasi tombol back
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Tutup activity ini dan kembali ke activity sebelumnya
+            }
+        });
+
+        // Inisialisasi komponen lainnya
+>>>>>>> b511c098b8c6a82cdb66c355191deafce9694457
         ImageView ivIncome = findViewById(R.id.ivIncome);
         ImageView ivExpense = findViewById(R.id.ivExpense);
 
