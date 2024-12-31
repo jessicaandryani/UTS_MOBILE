@@ -8,7 +8,7 @@
     android:layout_gravity="center"
     android:radius="8dp"
     android:elevation="4dp"
-    android:backgroundTint="@color/white"
+    android:backgroundTint="@color/ijo4"
     app:cardCornerRadius="8dp">
 
     <LinearLayout

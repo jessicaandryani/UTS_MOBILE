@@ -12,8 +12,9 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "keuangan.db"; // Gunakan satu nama konsisten
-    private static final int DATABASE_VERSION = 2; // Naikkan versi jika ada perubahan
+    private static final String DATABASE_NAME = "UTSMobile.db";
+    private static final int DATABASE_VERSION = 2; // Tingkatkan versi jika struktur tabel diubah
+    private static final String TABLE_USERS = "users";
 
     // Nama tabel
     private static final String TABLE_NAME = "transaksi";
@@ -32,7 +33,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Membuat tabel users
-        db.execSQL("CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_USERS + " (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "email TEXT UNIQUE, " +
+                "nama TEXT, " +
+                "password TEXT)");
 
         // Membuat tabel transaksi
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
@@ -54,26 +59,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Menambahkan data user
-    public Boolean insertData(String email, String password) {
-        SQLiteDatabase MyDatabase = this.getWritableDatabase();
+    public Boolean insertData(String email, String nama, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("email", email);
+        contentValues.put("nama", nama);
         contentValues.put("password", password);
-        long result = MyDatabase.insert("users", null, contentValues);
+        long result = db.insert("users", null, contentValues);
         return result != -1;
     }
 
-    public Boolean checkEmail(String email) {
-        SQLiteDatabase MyDatabase = this.getWritableDatabase();
-        Cursor cursor = MyDatabase.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});
-        return cursor.getCount() > 0;
+
+    public boolean checkEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE email = ?", new String[]{email});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
-    public Boolean checkEmailPassword(String email, String password) {
-        SQLiteDatabase MyDatabase = this.getWritableDatabase();
-        Cursor cursor = MyDatabase.rawQuery("SELECT * FROM users WHERE email = ? AND password = ?", new String[]{email, password});
-        return cursor.getCount() > 0;
+    public boolean checkEmailPassword(String email, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE email = ? AND password = ?", new String[]{email, password});
+        boolean valid = cursor.getCount() > 0;
+        cursor.close();
+        return valid;
     }
+
 
     // Menambahkan data transaksi
     public void addTransaksi(String tanggal, String kategori, double jumlah, String tipe) {
@@ -89,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public double getTotalPemasukan() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'masuk'", null);
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'Pemasukan'", null);
 
         if (cursor.moveToFirst()) {
             total = cursor.getDouble(0);
@@ -100,11 +112,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("DatabaseHelper", "Total Pemasukan: " + total);
         return total;
     }
+    public String getNamaByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nama FROM " + TABLE_USERS + " WHERE email = ?", new String[]{email});
+        String nama = null;
+
+        if (cursor.moveToFirst()) {
+            nama = cursor.getString(0); // Kolom pertama adalah nama
+        }else {
+            Log.d("DatabaseHelper", "Nama tidak ditemukan untuk email: " + email);
+        }
+        cursor.close();
+        return nama;
+    }
 
     public double getTotalPengeluaran() {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'keluar'", null);
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_JUMLAH + ") FROM " + TABLE_NAME + " WHERE " + COLUMN_TIPE + " = 'Pengeluaran'", null);
+
 
         if (cursor.moveToFirst()) {
             total = cursor.getDouble(0);
@@ -115,6 +141,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("DatabaseHelper", "Total Pengeluaran: " + total);
         return total;
     }
+
 
     // Mengambil semua data transaksi
     public ArrayList<TransaksiModel> getAllTransaksi() {
@@ -145,4 +172,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public double getTotalSaldo() {
+        return getTotalPemasukan() - getTotalPengeluaran();
+    }
 }

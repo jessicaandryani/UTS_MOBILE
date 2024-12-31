@@ -3,14 +3,14 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_baseline_home_32"
-        android:title="Home" />
+        android:icon="@drawable/baseline_list_alt_24"
+        android:title="Transaksi" />
     <item
         android:id="@+id/navigation_dompet"
-        android:icon="@drawable/baseline_account_balance_wallet_24"
-        android:title="Dompet" />
+        android:icon="@drawable/baseline_auto_graph_24"
+        android:title="Lapor" />
     <item
         android:id="@+id/navigation_account"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="Account" />
+        android:title="Milik Saya" />
 </menu>

@@ -1,51 +1,82 @@
 package com.jess.utsmobile;
 
+// MainActivity.java
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class WalletFragment extends Fragment {
 
-    private TextView cleanAssetsValue; // Untuk menampilkan Aset Bersih
-    private TextView accountBalance;   // Untuk menampilkan saldo akun
-    private DatabaseHelper dbHelper;
+    public class WebAppInterface {
+        private String ChartData;
+
+        public WebAppInterface(String chartData) {
+            this.ChartData = chartData;
+        }
+
+        @JavascriptInterface
+        public String getChartData() {
+            return ChartData;
+        }
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
-        // Inisialisasi UI elements
-        cleanAssetsValue = view.findViewById(R.id.clean_assets_value);   // Menemukan clean_assets_value TextView
-        accountBalance = view.findViewById(R.id.account_balance);        // Menemukan account_balance TextView
+        WebView webView = view.findViewById(R.id.webView);
+        webView.addJavascriptInterface(new WebAppInterface(getChartDataFromDB()), "Android");
 
-        // Inisialisasi DatabaseHelper
-        dbHelper = new DatabaseHelper(getContext());
+        webView.setWebViewClient(new WebViewClient()); // Menghindari pembukaan di browser eksternal
 
-        // Mengambil dan menampilkan total pemasukan (Aset Bersih)
-        displayAsetBersih();
+        WebSettings webSettings = webView.getSettings();
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true); // Izinkan DOM storage untuk Google Charts
+        webView.getSettings().setAllowFileAccess(true);
+
+        // Pasang JavascriptInterface untuk berkomunikasi dengan chart.html
+        webView.addJavascriptInterface(
+                new WebAppInterface(getChartDataFromDB()), "Android"
+        );
+
+        Log.d("WalletFragment", "Loading URL: file:///android_asset/chart.html");
+
+        // Perbaikan: Gunakan path yang benar untuk file lokal
+        webView.loadUrl("file:///android_asset/chart.html");
 
         return view;
     }
 
-    // Fungsi untuk menampilkan Aset Bersih
-    private void displayAsetBersih() {
-        // Mengambil total pemasukan dan total pengeluaran dari database
-        double totalPemasukan = dbHelper.getTotalPemasukan();
-        double totalPengeluaran = dbHelper.getTotalPengeluaran();
+    private String getChartDataFromDB() {
+        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+        ArrayList<TransaksiModel> transaksiList = dbHelper.getAllTransaksi();
 
-        // Menghitung Aset Bersih (total pemasukan - total pengeluaran)
-        double asetBersih = totalPemasukan - totalPengeluaran;
-
-        // Menampilkan Aset Bersih di UI
-        cleanAssetsValue.setText("Rp " + String.format("%,.0f", asetBersih));
-
-        // Menampilkan saldo akun (misalnya saldo = pemasukan - pengeluaran)
-        double saldoAkun = totalPemasukan - totalPengeluaran;
-        accountBalance.setText("Rp " + String.format("%,.0f", saldoAkun));
+        JSONArray jsonArray = new JSONArray();
+        for (TransaksiModel transaksi : transaksiList) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("kategori", transaksi.getKategori());
+                jsonObject.put("jumlah", transaksi.getJumlah());
+                jsonObject.put("tipe", transaksi.getJenis());
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.d("WalletFragment", "JSON Data: " + jsonArray.toString());
+        return jsonArray.toString();
     }
 }

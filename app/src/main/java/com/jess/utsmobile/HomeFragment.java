@@ -1,10 +1,13 @@
 package com.jess.utsmobile;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.Intent;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +25,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private TextView masukText, keluarText;
+    private TextView masukText, keluarText, saldoText;
     private DatabaseHelper db;
     private ArrayList<TransaksiModel> transaksiList;
     private TransaksiAdapter adapter;
@@ -30,16 +33,15 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Initialize UI components
         recyclerView = view.findViewById(R.id.recyclerView);
         masukText = view.findViewById(R.id.masuk);
         keluarText = view.findViewById(R.id.keluar);
+        saldoText = view.findViewById(R.id.saldo);
         FloatingActionButton tambahButton = view.findViewById(R.id.tambah);
 
-        // Set click listener for FloatingActionButton
+
         tambahButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), PilihanActivity.class);
             startActivity(intent);
@@ -48,36 +50,53 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize database
         db = new DatabaseHelper(getContext());
-
-        // Setup RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         transaksiList = db.getAllTransaksi();
         adapter = new TransaksiAdapter(transaksiList);
+        adapter = new TransaksiAdapter(db.getAllTransaksi());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        // Update total pemasukan dan pengeluaran
+        adapter.setOnItemDeleteListener(position -> {
+            TransaksiModel transaksi = transaksiList.get(position);
+            db.deleteTransaksi(transaksi.getId()); // Panggil dengan ID dari transaksi
+            transaksiList.remove(position);
+            adapter.notifyItemRemoved(position);
+
+            // Perbarui tampilan total pengeluaran dan pemasukan
+            updateTotal();
+
+        });
+
+        // Perbarui total setelah data dimuat
         updateTotal();
 
 
     }
 
-    // Method to update total pemasukan and pengeluaran
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            updateTotal();
+        }
+    }
+
+
     private void updateTotal() {
         double totalMasuk = db.getTotalPemasukan();
         double totalKeluar = db.getTotalPengeluaran();
+        double totalSaldo = db.getTotalSaldo();
 
-        // Format currency to Rupiah
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-        formatRupiah.setMaximumFractionDigits(0); // Remove decimals
-
-        // Set formatted totals to TextViews
-        masukText.setText("Penghasilan: " + formatRupiah.format(totalMasuk));
-        keluarText.setText("Pengeluaran: " + formatRupiah.format(totalKeluar));
+        masukText.setText(formatRupiah.format(totalMasuk));
+        keluarText.setText(formatRupiah.format(totalKeluar));
+        saldoText.setText(formatRupiah.format(totalSaldo));
     }
 }

@@ -1,13 +1,17 @@
 package com.jess.utsmobile;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,33 +21,47 @@ public class AccountFragment extends Fragment {
     private RecyclerView recyclerView;
     private AccountAdapter accountAdapter;
     private List<AccountItem> accountItemList;
+    private DatabaseHelper databaseHelper;
+    private TextView akun;
 
     public AccountFragment() {
         // Required empty public constructor
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
+        akun = view.findViewById(R.id.akun);
+
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+        databaseHelper = new DatabaseHelper(getContext());
 
-        // Setup GridLayoutManager untuk RecyclerView
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3)); // 3 kolom
+        String emailPengguna = "jessicaandryani@gmail.com";
+        String namaPengguna = databaseHelper.getNamaByEmail(emailPengguna);
 
-        // Inisialisasi list dan adapter
+        if (namaPengguna != null) {
+            akun.setText(namaPengguna);
+        } else {
+            akun.setText("Nama tidak ditemukan");
+            Log.d("AccountFragment", "Nama tidak ditemukan untuk email: " + emailPengguna);
+        }
+
+        // Setup GridLayoutManager
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
+        // Populate List
         accountItemList = new ArrayList<>();
         accountItemList.add(new AccountItem("Tentang", R.drawable.info));
         accountItemList.add(new AccountItem("Pengaturan", R.drawable.setting));
-        accountItemList.add(new AccountItem("Pesan Masuk", R.drawable.kontak));
+        accountItemList.add(new AccountItem("Keluar", R.drawable.sigout));
         accountItemList.add(new AccountItem("Pengingat", R.drawable.alarm));
         accountItemList.add(new AccountItem("Beri Komentar", R.drawable.like));
-        accountItemList.add(new AccountItem("Kartu", R.drawable.card));
 
-        accountAdapter = new AccountAdapter(accountItemList);
+        // Set Adapter
+        accountAdapter = new AccountAdapter(accountItemList, getContext());
         recyclerView.setAdapter(accountAdapter);
 
         return view;

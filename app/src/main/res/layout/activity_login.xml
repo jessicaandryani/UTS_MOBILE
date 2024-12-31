@@ -34,20 +34,39 @@
                     android:drawableLeft="@drawable/baseline_email_24"
                     android:drawablePadding="8dp"
                     android:hint="Email"
+                    android:textColor="@color/black"
                     android:padding="8dp"/>
 
-                <EditText
-                    android:id="@+id/login_password"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/lavender_border"
-                    android:drawableLeft="@drawable/baseline_lock_24"
-                    android:drawablePadding="8dp"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:padding="8dp" />
+                    android:background="@drawable/lavender_border">
 
+                    <EditText
+                        android:id="@+id/login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toStartOf="@+id/password_toggle"
+                        android:layout_marginEnd="50dp"
+                        android:hint="Password"
+                        android:background="@null"
+                        android:inputType="textPassword"
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:drawableLeft="@drawable/baseline_lock_24"
+                        android:drawablePadding="8dp" />
+
+                    <ImageView
+                        android:id="@+id/password_toggle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:padding="7dp"
+                        android:src="@drawable/baseline_remove_red_eye_24"
+                        android:contentDescription="Toggle Password Visibility" />
+                </RelativeLayout>
                 <Button
                     android:id="@+id/login_button"
                     android:layout_width="match_parent"
